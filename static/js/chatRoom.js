@@ -110,10 +110,31 @@ $(function() {
     function sendMessage () {
         var inputMessage = $inputArea.val();  // 获取输入框的值
 
-        if (inputMessage && connected) {
-            $inputArea.val('');      // 清空输入框的值
-            socket.send(inputMessage);  // 基于WebSocket连接发送消息
-            console.log("send message:" + inputMessage);
+        const predictUrl = "http://127.0.0.1:8091/predict";
+        var $data = JSON.stringify({"text":inputMessage});
+        if (inputMessage) {
+            $.ajax({
+                type: "POST",
+                url: predictUrl,
+                async: false,
+                contentType: "application/json;charset=utf-8",
+                data: $data,
+                dataType: "json",
+                success:function (message) {
+                    if (message.result === "Offensive") {
+                        alert("Offensive");
+                    } else {
+                        if (inputMessage && connected) {
+                            $inputArea.val('');      // 清空输入框的值
+                            socket.send(inputMessage);  // 基于WebSocket连接发送消息
+                            console.log("send message:" + inputMessage);
+                        }
+                    }
+                },
+                error:function (message) {
+                    alert("fail: " + message);
+                }
+            });
         }
     }
 });
