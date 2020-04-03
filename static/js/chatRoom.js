@@ -1,5 +1,4 @@
 $(function() {
-
     //=========================初始化====================================
     var $window = $(window);
     var $messageArea = $('#messageArea');       // 消息显示的区域
@@ -31,7 +30,7 @@ $(function() {
 
     //====================webSocket连接======================
     // 创建一个webSocket连接
-    var socket = new WebSocket('ws://'+window.location.host+'/chatRoom/WS?name=' + $('#name').text());
+    var socket = new WebSocket('ws://'+window.location.host+'/chatRoom/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val());
 
     // 当webSocket连接成功的回调函数
     socket.onopen = function () {
@@ -55,10 +54,13 @@ $(function() {
         var name = data.name;
         var type = data.type;
         var msg = data.message;
+        var r = data.random
 
         // type为0表示有人发消息
         var $messageDiv;
+        // var $rand = $('#rand').val()
         if (type == 0) {
+            var $useravatar = $('<img height="80px" style="margin-right: 10px;margin-bottom: 40px" src="/static/img/avatar/avatar%20(' + r + ').png"/>');
             var $usernameDiv = $('<span style="margin-right: 15px;font-weight: 700;overflow: hidden;text-align: right;"/>')
                     .text(name);
             if (name == $("#name").text()) {
@@ -66,11 +68,16 @@ $(function() {
             } else {
                 $usernameDiv.css('color', getUsernameColor(name));
             }
-            var $messageBodyDiv = $('<span style="color: gray;"/>')
+            var $usernamemsg = $('<div style="display: inline-block"/>');
+            var $messageBodyDiv = $('<div class="msg"/>')
                     .text(msg);
-            $messageDiv = $('<li style="list-style-type:none;font-size:25px;"/>')
+            var $username = $('<div class="msg_username"/>').text(name)
+            $usernamemsg.append($username, $messageBodyDiv)
+
+            $messageDiv = $('<li style="list-style-type:none;font-size:20px;margin-bottom: -30px"/>')
                     .data('username', name)
-                    .append($usernameDiv, $messageBodyDiv);
+                    // .append($usernameDiv, $messageBodyDiv);
+                    .append($useravatar, $usernamemsg);
         }
         // type为1或2表示有人加入或退出
         else {

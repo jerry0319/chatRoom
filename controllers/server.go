@@ -1,38 +1,42 @@
 package controllers
 
 import (
-	"net/http"
-
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
+	"net/http"
 )
 
 type ServerController struct {
 	beego.Controller
 }
 
-func (c *ServerController) Get()  {
+func (c *ServerController) Post() {
 	name := c.GetString("name")
+	random, _ := c.GetInt("rand")
 	if len(name) == 0 {
 		beego.Error("name is NULL")
 		c.Redirect("/", 302)
 		return
 	}
 
-	beego.Info("get name:"+name+", and send to chatRoom.html")
+	beego.Info("get name:" + name + ", and send to chatRoom.html")
 	c.Data["name"] = name
+	c.Data["rand"] = random
 	c.TplName = "chatRoom.html"
 }
 
 // 用于与用户间的websocket连接(chatRoom.html发送来的websocket请求)
 func (c *ServerController) WS() {
 	name := c.GetString("name")
+	random, _ := c.GetInt("rand")
+	fmt.Println(random)
 	if len(name) == 0 {
 		beego.Error("name is NULL")
 		c.Redirect("/", 302)
 		return
 	}
-	
+
 	// 检验http头中upgrader属性，若为websocket，则将http协议升级为websocket协议
 	conn, err := (&websocket.Upgrader{}).Upgrade(c.Ctx.ResponseWriter, c.Ctx.Request, nil)
 
@@ -47,6 +51,7 @@ func (c *ServerController) WS() {
 
 	var client Client
 	client.name = name
+	client.rand = random
 	client.conn = conn
 
 	// 如果用户列表中没有该用户
@@ -64,18 +69,19 @@ func (c *ServerController) WS() {
 	// 由于WebSocket一旦连接，便可以保持长时间通讯，则该接口函数可以一直运行下去，直到连接断开
 	for {
 		// 读取消息。如果连接断开，则会返回错误
-        _, msgStr, err := client.conn.ReadMessage()
+		_, msgStr, err := client.conn.ReadMessage()
 
-        // 如果返回错误，就退出循环
-        if err != nil {
-            break
-        }
+		// 如果返回错误，就退出循环
+		if err != nil {
+			break
+		}
 
-		beego.Info("WS-----------receive: "+string(msgStr))
+		beego.Info("WS-----------receive: " + string(msgStr))
 
 		//如果没有错误，则把用户发送的信息放入message通道中
 		var msg Message
 		msg.Name = client.name
+		msg.Rand = client.rand
 		msg.EventType = 0
 		msg.Message = string(msgStr)
 		message <- msg

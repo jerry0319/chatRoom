@@ -9,13 +9,16 @@
     <link href="/static/css/index.css" rel="stylesheet">
     <script src="/static/js/bootstrap4.1.0.min.js"></script>
     <script src="/static/js/jquery-3.2.1.min.js"></script>
+    <script>
+        $(function () {$('#rand').val(parseInt(Math.random() * 17 + 1,10));})
+    </script>
 </head>
 
 <body>
 <div class="text-center shadow bg-white rounded box">
     <h1 class="box-title">Welcome to Chat Room</h1>
     <div class="row box-form">
-        <form class="form-inline" action="/chatRoom">
+        <form class="form-inline" action="/chatRoom"  enctype="multipart/form-data" method="post">
             <div class="input-group" style="margin:0 auto;">
                 <div class="input-group-prepend">
                     <span class="input-group-text">
@@ -23,13 +26,14 @@
                     </span>
                 </div>
                 <input type="text" class="form-control" name="name" placeholder="input your name">
+                <input type="hidden" name="rand" id="rand">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary" type="submit">Go</button>
                 </div>
             </div>
         </form>
     </div>
-    <p class="text-muted box-footer">@<a href="https://github.com/99MyCql">douNine</a></p>
+    <p class="text-muted box-footer"></p>
 </div>
 </body>
 </html>
