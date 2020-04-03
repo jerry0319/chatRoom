@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
 	"net/http"
@@ -30,7 +29,6 @@ func (c *ServerController) Post() {
 func (c *ServerController) WS() {
 	name := c.GetString("name")
 	random, _ := c.GetInt("rand")
-	fmt.Println(random)
 	if len(name) == 0 {
 		beego.Error("name is NULL")
 		c.Redirect("/", 302)
