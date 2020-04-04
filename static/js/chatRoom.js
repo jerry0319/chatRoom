@@ -110,7 +110,7 @@ $(function() {
     function sendMessage () {
         var inputMessage = $inputArea.val();  // 获取输入框的值
 
-        const predictUrl = "http://163.221.132.91:8091/predict";
+        const predictUrl = "http://aoi.naist.jp/predict";
         var $data = JSON.stringify({"text":inputMessage});
         if (inputMessage) {
             $.ajax({
