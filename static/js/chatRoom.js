@@ -106,35 +106,50 @@ $(function() {
         sendMessage();
     });
 
+    $(document).on('click', '#re_send', function() {
+        var inputMessage = $inputArea.val();
+        sendToSocket(inputMessage);
+        $('#myModal').modal('hide');
+        return 0;
+    });
+
     // 通过webSocket发送消息到服务端
     function sendMessage () {
         var inputMessage = $inputArea.val();  // 获取输入框的值
 
         const predictUrl = "http://aoi.naist.jp/predict";
         var $data = JSON.stringify({"text":inputMessage});
+
         if (inputMessage) {
             $.ajax({
                 type: "POST",
                 url: predictUrl,
-                async: false,
                 contentType: "application/json;charset=utf-8",
                 data: $data,
                 dataType: "json",
                 success:function (message) {
                     if (message.result === "Offensive") {
-                        alert("Offensive");
+                        // alert("Offensive");
+                        $('#myModal').modal('show');
+                        $('#myModal').on('hidden.bs.modal', function (e) {
+                            $inputArea.focus();
+                        })
                     } else {
-                        if (inputMessage && connected) {
-                            $inputArea.val('');      // 清空输入框的值
-                            socket.send(inputMessage);  // 基于WebSocket连接发送消息
-                            console.log("send message:" + inputMessage);
-                        }
+                        sendToSocket(inputMessage);
                     }
                 },
                 error:function (message) {
                     alert("fail: " + message);
                 }
             });
+        }
+    }
+
+    function sendToSocket(inputMessage) {
+        if (inputMessage && connected) {
+            $inputArea.val('');      // 清空输入框的值
+            socket.send(inputMessage);  // 基于WebSocket连接发送消息
+            console.log("send message:" + inputMessage);
         }
     }
 });
