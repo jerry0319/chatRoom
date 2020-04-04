@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Chat Room</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/icon.png"/>
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/chatRoom.css" rel="stylesheet">
     <script src="/static/js/jquery-3.2.1.min.js"></script>
@@ -12,9 +13,14 @@
 
     <script>
         $(function() {
-            var rand = {{.rand}}
-            $("#avatar").attr('src', '/static/img/avatar/avatar (' + rand + ').png')
-            $('#rand').val(rand)
+            var rand = {{.rand}};
+            var uname = {{.name}};
+            if (uname === 'gao' || uname === 'Gao') {
+                $("#avatar").attr('src', '/static/img/icon.png');
+            } else {
+                $("#avatar").attr('src', '/static/img/avatar/avatar (' + rand + ').png');
+            }
+            $('#rand').val(rand);
         })
     </script>
 </head>

@@ -61,6 +61,9 @@ $(function() {
         // var $rand = $('#rand').val()
         if (type == 0) {
             var $useravatar = $('<img height="80px" style="margin-right: 10px;margin-bottom: 40px" src="/static/img/avatar/avatar%20(' + r + ').png"/>');
+            if (name === 'gao' || name === 'Gao') {
+                $useravatar = $('<img height="80px" style="margin-right: 10px;margin-bottom: 40px" src="/static/img/icon.png"/>');
+            }
             var $usernameDiv = $('<span style="margin-right: 15px;font-weight: 700;overflow: hidden;text-align: right;"/>')
                     .text(name);
             if (name == $("#name").text()) {
