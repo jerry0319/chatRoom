@@ -111,8 +111,10 @@ $(function() {
 
     $(document).on('click', '#re_send', function() {
         var inputMessage = $inputArea.val();
-        sendToSocket(inputMessage);
-        $('#myModal').modal('hide');
+        if (inputMessage) {
+            sendToSocket(inputMessage);
+            $('#myModal').modal('hide');
+        }
         return 0;
     });
 
