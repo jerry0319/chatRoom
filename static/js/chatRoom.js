@@ -132,6 +132,7 @@ $(function() {
                 contentType: "application/json;charset=utf-8",
                 data: $data,
                 dataType: "json",
+                async: false,
                 success:function (message) {
                     if (message.result === "Offensive") {
                         // alert("Offensive");
