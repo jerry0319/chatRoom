@@ -76,9 +76,9 @@ $(function() {
         var $messageDiv;
         // var $rand = $('#rand').val()
         if (type == 0) {
-            var $useravatar = $('<img height="60px" style="margin-right: 10px;margin-bottom: 40px" src="/static/img/avatar/avatar%20(' + r + ').png"/>');
+            var $useravatar = $('<img height="70px" style="margin-right: 10px;margin-bottom: 37px" src="/static/img/avatar/avatar%20(' + r + ').png"/>');
             if (name === 'gao' || name === 'Gao') {
-                $useravatar = $('<img height="60px" style="margin-right: 10px;margin-bottom: 40px" src="/static/img/icon.png"/>');
+                $useravatar = $('<img height="70px" style="margin-right: 10px;margin-bottom: 37px" src="/static/img/icon.png"/>');
             }
             var $usernameDiv = $('<span style="margin-right: 15px;font-weight: 700;overflow: hidden;text-align: right;"/>')
                     .text(name);
@@ -107,7 +107,7 @@ $(function() {
         // type为1或2表示有人加入或退出
         else {
             var $messageBodyDiv = $('<span style="color:#999999;">')
-                    .text(msg);
+                    .text(msg + "　" + new Date().format("yyyy-MM-dd hh:mm:ss"));
             $messageDiv = $('<li style="list-style-type:none;font-size:15px;text-align:center;"/>')
                     .append($messageBodyDiv);
         }
