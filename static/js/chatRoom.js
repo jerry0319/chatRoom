@@ -27,6 +27,22 @@ $(function() {
     var nameColor = getUsernameColor( $("#name").text());
     $("#name").css('color', nameColor);
 
+    Date.prototype.format = function (fmt) { // author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, // 月份
+            "d+": this.getDate(), // 日
+            "h+": this.getHours(), // 小时
+            "m+": this.getMinutes(), // 分
+            "s+": this.getSeconds(), // 秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), // 季度
+            "S": this.getMilliseconds() // 毫秒
+        };
+        if (/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    };
 
     //====================webSocket连接======================
     // 创建一个webSocket连接
@@ -72,9 +88,15 @@ $(function() {
                 $usernameDiv.css('color', getUsernameColor(name));
             }
             var $usernamemsg = $('<div style="display: inline-block"/>');
-            var $messageBodyDiv = $('<div class="msg"/>')
+            var $messageBodyDiv = "";
+            if (name === $("#name").text()) {
+                $messageBodyDiv = $('<div class="msg msg_mine"/>')
                     .text(msg);
-            var $username = $('<div class="msg_username"/>').text(name)
+            } else {
+                $messageBodyDiv = $('<div class="msg msg_other"/>')
+                    .text(msg);
+            }
+            var $username = $('<div class="msg_username"/>').text(name + "　" + new Date().format("hh:mm:ss"))
             $usernamemsg.append($username, $messageBodyDiv)
 
             $messageDiv = $('<li style="list-style-type:none;font-size:20px;margin-bottom: -30px"/>')
