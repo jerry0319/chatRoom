@@ -39,7 +39,7 @@ func (c *ServerController) WS() {
 	conn, err := (&websocket.Upgrader{}).Upgrade(c.Ctx.ResponseWriter, c.Ctx.Request, nil)
 
 	if _, ok := err.(websocket.HandshakeError); ok {
-		beego.Error("Not a websocket connection")
+		beego.Error("Not a websocket connection", err)
 		http.Error(c.Ctx.ResponseWriter, "Not a websocket handshake", 400)
 		return
 	} else if err != nil {
