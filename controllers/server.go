@@ -36,7 +36,12 @@ func (c *ServerController) WS() {
 	}
 
 	// 检验http头中upgrader属性，若为websocket，则将http协议升级为websocket协议
-	conn, err := (&websocket.Upgrader{}).Upgrade(c.Ctx.ResponseWriter, c.Ctx.Request, nil)
+	conn, err := (&websocket.Upgrader{
+		// 解决跨域问题
+		CheckOrigin: func(r *http.Request) bool {
+			return true
+		},
+	}).Upgrade(c.Ctx.ResponseWriter, c.Ctx.Request, nil)
 
 	if _, ok := err.(websocket.HandshakeError); ok {
 		beego.Error("Not a websocket connection", err)
