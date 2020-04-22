@@ -15,7 +15,7 @@ func (c *ServerController) Post() {
 	random, _ := c.GetInt("rand")
 	if len(name) == 0 {
 		beego.Error("name is NULL")
-		c.Redirect("/", 302)
+		c.Redirect("/cr", 302)
 		return
 	}
 
@@ -31,7 +31,7 @@ func (c *ServerController) WS() {
 	random, _ := c.GetInt("rand")
 	if len(name) == 0 {
 		beego.Error("name is NULL")
-		c.Redirect("/", 302)
+		c.Redirect("/cr", 302)
 		return
 	}
 
