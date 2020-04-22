@@ -46,7 +46,7 @@ $(function() {
 
     //====================webSocket连接======================
     // 创建一个webSocket连接
-    var socket = new WebSocket('ws://'+window.location.host+'/chatRoom/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val());
+    var socket = new WebSocket('ws://'+window.location.host+'/cr/chatRoom/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val());
 
     // 当webSocket连接成功的回调函数
     socket.onopen = function () {
