@@ -79,7 +79,7 @@ func (c *ServerController) WS() {
 			break
 		}
 
-		beego.Info("WSS-----------receive: " + string(msgStr))
+		beego.Info("WS-----------receive: " + string(msgStr))
 
 		//如果没有错误，则把用户发送的信息放入message通道中
 		var msg Message
