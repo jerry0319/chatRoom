@@ -7,6 +7,6 @@ import (
 
 func init() {
 	beego.Router("/", &controllers.MainController{})
-	beego.Router("/cr/chatRoom", &controllers.ServerController{})
-	beego.Router("/cr/chatRoom/WS", &controllers.ServerController{}, "get:WS")
+	beego.Router("/chatRoom", &controllers.ServerController{})
+	beego.Router("/chatRoom/WS", &controllers.ServerController{}, "get:WS")
 }
