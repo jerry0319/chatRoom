@@ -5,6 +5,7 @@ $(function () {
     var $inputArea = $('#inputArea');           // 输入消息的区域
     $inputArea.focus();  // 首先聚焦到输入框
     var connected = false;                      // 用来判断是否连接的标志
+    var prodPath = $('#prodPath').val();
 
     // 通过一个hash函数得到用户名的颜色
     function getUsernameColor(username) {
@@ -65,9 +66,9 @@ $(function () {
 
     function extend_message(r, name, msg, type) {
         if (type === 0) {
-            var $useravatar = $('<img height="70px" style="margin-right: 10px;margin-bottom: 37px" src="/static/img/avatar/avatar%20(' + r + ').png"/>');
+            var $useravatar = $('<img height="70px" style="margin-right: 10px;margin-bottom: 37px" src="' + prodPath + '/static/img/avatar/avatar%20(' + r + ').png"/>');
             if (name === 'gao' || name === 'Gao') {
-                $useravatar = $('<img height="70px" style="margin-right: 10px;margin-bottom: 37px" src="/static/img/icon.png"/>');
+                $useravatar = $('<img height="70px" style="margin-right: 10px;margin-bottom: 37px" src="' + prodPath + '/static/img/icon.png"/>');
             }
             var $usernameDiv = $('<span style="margin-right: 15px;font-weight: 700;overflow: hidden;text-align: right;"/>')
                 .text(name);
@@ -158,8 +159,8 @@ $(function () {
     function sendMessage(type) {
         var inputMessage = $inputArea.val();  // 获取输入框的值
 
-        // const predictUrl = "http://aoi.naist.jp/predict";
-        const predictUrl = "http://127.0.0.1:8091/";
+        const predictUrl = "http://aoi.naist.jp/predict";
+        // const predictUrl = "http://127.0.0.1:8091/";
         var $data = JSON.stringify({"text": inputMessage, "type": type});
         var r = $('#rand').val()
         var nam = $('#name').text()

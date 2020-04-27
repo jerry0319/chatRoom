@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
 	"net/http"
+	"strings"
 )
 
 type ServerController struct {
@@ -22,6 +24,11 @@ func (c *ServerController) Post() {
 	beego.Info("get name:" + name + ", and send to chatRoom.html")
 	c.Data["name"] = name
 	c.Data["rand"] = random
+	c.Data["prodPath"] = ""
+	if strings.EqualFold("prod", beego.BConfig.RunMode) {
+		fmt.Println("in prod mode, using prod path.")
+		c.Data["prodPath"] = "/chatRoom"
+	}
 	c.TplName = "chatRoom.html"
 }
 
