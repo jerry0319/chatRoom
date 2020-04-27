@@ -6,7 +6,5 @@ import (
 )
 
 func main() {
-	beego.SetStaticPath("/chatRoom/static", "static/")
-
 	beego.Run()
 }
