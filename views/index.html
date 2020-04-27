@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chat Room</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/cr/static/img/icon.png"/>
+    <link rel="shortcut icon" type="image/x-icon" href="../static/img/icon.jpg"/>
     <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css">
-    <link href="/cr/static/css/bootstrap4.1.0.min.css" rel="stylesheet">
-    <link href="/cr/static/css/index.css" rel="stylesheet">
-    <script src="/cr/static/js/bootstrap4.1.0.min.js"></script>
-    <script src="/cr/static/js/jquery-3.2.1.min.js"></script>
+    <link href="../static/css/bootstrap4.1.0.min.css" rel="stylesheet">
+    <link href="../static/css/index.css" rel="stylesheet">
+    <script src="../static/js/bootstrap4.1.0.min.js"></script>
+    <script src="../static/js/jquery-3.2.1.min.js"></script>
     <script>
         $(function () {$('#rand').val(parseInt(Math.random() * 17 + 1, 10));})
     </script>
 </head>
 
 <body>
-{{/*<script opacity='0.7' src="/cr/static/js/canvas-nest.min.js"></script>*/}}
-<script alpha="0.4" src="/cr/static/js/ribbon.min.js"></script>
+{{/*<script opacity='0.7' src="../static/js/canvas-nest.min.js"></script>*/}}
+<script alpha="0.4" src="../static/js/ribbon.min.js"></script>
 
 <div class="text-center shadow bg-white rounded box">
     <h1 class="box-title">Welcome to Chat Room</h1>
     <div class="row box-form">
-        <form class="form-inline" action="/cr/chatRoom"  enctype="multipart/form-data" method="post">
+        <form class="form-inline" action="/chatRoom"  enctype="multipart/form-data" method="post">
             <div class="input-group" style="margin:0 auto;">
                 <div class="input-group-prepend">
                     <span class="input-group-text">

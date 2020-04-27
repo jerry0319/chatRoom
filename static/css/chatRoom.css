@@ -95,7 +95,9 @@ html, input {
     }
     .button {
         margin-left: 30px;
-        padding: 6px 50px;
+        /*padding: 6px 50px;*/
+        padding: .375rem .75rem;
+        font-size: 0.8rem;
     }
     #avatar {
         margin-right: 30px
@@ -142,7 +144,9 @@ html, input {
     }
     .button {
         margin-left: 8px;
-        padding: 6px 10px;
+        /*padding: 6px 10px;*/
+        padding: .375rem .75rem;
+        font-size: 0.8rem;
     }
 
 }
