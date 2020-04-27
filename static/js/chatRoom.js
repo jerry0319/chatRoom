@@ -178,6 +178,8 @@ $(function () {
                         if (type === 1){
                             // show_modal();
                             extend_message(r, nam, inputMessage, 0);
+                            $inputArea.val('');
+                            $inputArea.focus();
                         } else if (type === 2) {
                             // show_modal();
                             sendToSocket(message.result);
