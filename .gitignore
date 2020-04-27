@@ -4,3 +4,4 @@ nohup.out
 .vscode
 .idea
 conf
+conf/app.conf
