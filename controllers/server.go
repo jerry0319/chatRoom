@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"chatRoom/utils"
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
@@ -27,7 +28,10 @@ func (c *ServerController) Post() {
 	c.Data["prodPath"] = ""
 	if strings.EqualFold("prod", beego.BConfig.RunMode) {
 		fmt.Println("in prod mode, using prod path.")
-		c.Data["prodPath"] = "/chatRoom"
+		relativePath := utils.GetRelativePath()
+		fmt.Println("~~~~~~~~~~~" + relativePath + "~~~~~~~~~~~")
+		prodPath := utils.LoadStaticRelativePath(relativePath, "/static")
+		c.Data["prodPath"] = prodPath
 	}
 	c.TplName = "chatRoom.html"
 }
