@@ -159,7 +159,7 @@ $(function () {
     function sendMessage(type) {
         var inputMessage = $inputArea.val();  // 获取输入框的值
 
-        var predictUrl = "http://aoi.naist.jp/model/predict";
+        var predictUrl = "http://aoi.naist.jp/predict";
         if (prodPath === '') {
             predictUrl = "http://127.0.0.1:8091/predict";
         }
