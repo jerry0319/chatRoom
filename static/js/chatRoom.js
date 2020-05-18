@@ -159,9 +159,9 @@ $(function () {
     function sendMessage(type) {
         var inputMessage = $inputArea.val();  // 获取输入框的值
 
-        var predictUrl = "http://aoi.naist.jp/predict/get_prediction";
+        var predictUrl = "http://aoi.naist.jp/model/predict";
         if (prodPath === '') {
-            predictUrl = "http://127.0.0.1:8091/get_prediction";
+            predictUrl = "http://127.0.0.1:8091/predict";
         }
         var $data = JSON.stringify({"text": inputMessage, "type": type});
         var r = $('#rand').val()
