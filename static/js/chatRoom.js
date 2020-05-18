@@ -161,7 +161,7 @@ $(function () {
 
         var predictUrl = "http://aoi.naist.jp/predict/get_prediction";
         if (prodPath === '') {
-            predictUrl = "http://127.0.0.1:8091/";
+            predictUrl = "http://127.0.0.1:8091/get_prediction";
         }
         var $data = JSON.stringify({"text": inputMessage, "type": type});
         var r = $('#rand').val()
