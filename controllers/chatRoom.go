@@ -24,13 +24,19 @@ type Message struct {
 	Rand      int    `json:"random"`  // 用户随机数
 }
 
+type KeepAlive struct {
+	msg    Message
+	client Client
+}
+
 var (
 	// 此处要设置有缓冲的通道。因为这是goroutine自己从通道中发送并接受数据。
 	// 若是无缓冲的通道，该goroutine发送数据到通道后就被锁定，需要数据被接受后才能解锁，而恰恰接受数据的又只能是它自己
-	join    = make(chan Client, 10)  // 用户加入通道
-	leave   = make(chan Client, 10)  // 用户退出通道
-	message = make(chan Message, 10) // 消息通道
-	clients = make(map[Client]bool)  // 用户映射
+	join      = make(chan Client, 10)  // 用户加入通道
+	leave     = make(chan Client, 10)  // 用户退出通道
+	message   = make(chan Message, 10) // 消息通道
+	keepAlive = make(chan KeepAlive, 10)
+	clients   = make(map[Client]bool) // 用户映射
 )
 
 func init() {
@@ -97,6 +103,19 @@ func broadcaster() {
 			msg.EventType = 2
 			msg.Message = fmt.Sprintf("%s leave, there are %d preson in room", client.name, len(clients))
 			message <- msg
+
+		// 保持连接
+		case alive := <-keepAlive:
+
+			alive.msg.Message = "PONG"
+			data, err := json.Marshal(alive.msg)
+			if err != nil {
+				beego.Error("Fail to marshal message:", err)
+				return
+			}
+			if alive.client.conn.WriteMessage(websocket.TextMessage, data) != nil {
+				beego.Error("Fail to write message")
+			}
 		}
 	}
 }

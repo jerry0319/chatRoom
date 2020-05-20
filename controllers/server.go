@@ -85,16 +85,23 @@ func (c *ServerController) WS() {
 		if err != nil {
 			break
 		}
-
-		beego.Info("WS-----------receive: " + string(msgStr))
-
-		//如果没有错误，则把用户发送的信息放入message通道中
 		var msg Message
 		msg.Name = client.name
 		msg.Rand = client.rand
-		msg.EventType = 0
 		msg.Message = string(msgStr)
-		message <- msg
+
+		if string(msgStr) != "PING" {
+			beego.Info("WS-----------receive: " + string(msgStr))
+			//如果没有错误，则把用户发送的信息放入message通道中
+			msg.EventType = 0
+			message <- msg
+		} else {
+			msg.EventType = 3
+			var alive KeepAlive
+			alive.msg = msg
+			alive.client = client
+			keepAlive <- alive
+		}
 	}
 
 	// cannot find template bug fixed

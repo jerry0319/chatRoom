@@ -45,18 +45,37 @@ $(function () {
         return fmt;
     };
 
+
     //====================webSocket连接======================
     // 创建一个webSocket连接
     var socket = new WebSocket('ws://' + window.location.host + '/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val());
+
+    var timerID = 0;
+
+    function keepAlive() {
+        var timeout = 60000;
+        if (socket.readyState === socket.OPEN) {
+            socket.send("PING");
+        }
+        timerID = setTimeout(keepAlive, timeout);
+    }
+
+    function cancelKeepAlive() {
+        if (timerID) {
+            clearTimeout(timerID);
+        }
+    }
 
     // 当webSocket连接成功的回调函数
     socket.onopen = function () {
         console.log("webSocket open");
         connected = true;
+        keepAlive();
     };
 
     // 断开webSocket连接的回调函数
     socket.onclose = function () {
+        cancelKeepAlive();
         console.log("webSocket close");
         connected = false;
     };
@@ -111,16 +130,17 @@ $(function () {
     socket.onmessage = function (event) {
         // 将服务端发送来的消息进行json解析
         var data = JSON.parse(event.data);
-        console.log("revice:", data);
+        if (data.type !== 3) {
+            console.log("revice:", data);
+            var name = data.name;
+            var type = data.type;
+            var msg = data.message;
+            var r = data.random
 
-        var name = data.name;
-        var type = data.type;
-        var msg = data.message;
-        var r = data.random
-
-        // type为0表示有人发消息
-        // var $rand = $('#rand').val()
-        extend_message(r, name, msg, type)
+            // type为0表示有人发消息
+            // var $rand = $('#rand').val()
+            extend_message(r, name, msg, type)
+        }
     }
 
     //========================发送消息==========================
@@ -177,7 +197,7 @@ $(function () {
                 async: false,
                 success: function (message) {
                     if (message.result !== -1) { //offensive
-                        if (type === 1){
+                        if (type === 1) {
                             // show_modal();
                             extend_message(r, nam, inputMessage, 0);
                             $inputArea.val('');
