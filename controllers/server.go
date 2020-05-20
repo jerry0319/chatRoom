@@ -96,4 +96,7 @@ func (c *ServerController) WS() {
 		msg.Message = string(msgStr)
 		message <- msg
 	}
+
+	// cannot find template bug fixed
+	c.TplName = "index.html"
 }
