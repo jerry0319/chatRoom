@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
 	"net/http"
@@ -35,7 +34,6 @@ func (c *ServerController) Post() {
 	c.Data["rand"] = random
 	c.Data["prodPath"] = ""
 	if strings.EqualFold("prod", beego.BConfig.RunMode) {
-		fmt.Println("in prod mode, using prod path.")
 		c.Data["prodPath"] = "/prod"
 	}
 	c.TplName = "chatRoom.html"
