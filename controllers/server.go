@@ -1,16 +1,25 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/gorilla/websocket"
 	"net/http"
+	"sort"
 	"strings"
 )
 
 type ServerController struct {
 	beego.Controller
 }
+
+type OnlineClient struct {
+	Name string `json:"name"`
+	Rand int    `json:"rand"`
+}
+
+type OnlineClients []OnlineClient
 
 func (c *ServerController) Post() {
 	name := c.GetString("name")
@@ -106,4 +115,60 @@ func (c *ServerController) WS() {
 
 	// cannot find template bug fixed
 	c.TplName = "index.html"
+}
+
+func (c *ServerController) GetOnlineList() {
+	c.TplName = "chatRoom.html"
+	if clients != nil && len(clients) > 0 {
+		var onlineClientList OnlineClients
+		for client, inRoom := range clients {
+			if inRoom {
+				var onlineClient OnlineClient
+				onlineClient.Name = client.name
+				onlineClient.Rand = client.rand
+				onlineClientList = append(onlineClientList, onlineClient)
+			}
+		}
+		Sort(onlineClientList)
+		data, err := json.Marshal(onlineClientList)
+		if err != nil {
+			beego.Error("Fail to marshal clients list:", err)
+			return
+		}
+		c.Ctx.WriteString(string(data))
+	}
+}
+
+func (o OnlineClients) Len() int {
+	return len(o)
+}
+
+// 在比较的方法中，定义排序的规则
+func (o OnlineClients) Less(i, j int) bool {
+	if o[i].Name < o[j].Name {
+		return true
+	} else if o[i].Name > o[j].Name {
+		return false
+	} else {
+		return o[i].Rand < o[i].Rand
+	}
+}
+
+func (o OnlineClients) Swap(i, j int) {
+	temp := o[i]
+	o[i] = o[j]
+	o[j] = temp
+}
+
+func Sort(s sort.Interface) {
+	length := s.Len()
+	for i := 0; i < length; i++ {
+		minIndex := i
+		for j := i + 1; j < length; j++ {
+			if s.Less(j, i) {
+				minIndex = j
+			}
+		}
+		s.Swap(minIndex, i)
+	}
 }

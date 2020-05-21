@@ -6,6 +6,30 @@ $(function () {
     $inputArea.focus();  // 首先聚焦到输入框
     var connected = false;                      // 用来判断是否连接的标志
     var prodPath = $('#prodPath').val();
+    var requestUrl = "http://aoi.naist.jp/";
+    if (prodPath === '') {
+        requestUrl = "http://127.0.0.1:8091/";
+    }
+
+    $("#usersModal").modal({backdrop: "static", keyboard: false});
+    $("#onlineList").click(function () {
+        $("#usersModal").modal('toggle')
+    });
+
+    $('#usersModal').on('shown.bs.modal', function (e) {
+        $(document).off('focusin.modal');
+    })
+
+    function position(dom) {
+        dom.css({
+            left: ($window.width() - dom.outerWidth()) - 30
+        });
+    }
+    position($("#usersModal"));
+
+    $(window).resize(function(){
+        position($("#usersModal"));
+    });
 
     // 通过一个hash函数得到用户名的颜色
     function getUsernameColor(username) {
@@ -91,7 +115,7 @@ $(function () {
             }
             var $usernameDiv = $('<span style="margin-right: 15px;font-weight: 700;overflow: hidden;text-align: right;"/>')
                 .text(name);
-            if (name == $("#name").text()) {
+            if (name === $("#name").text()) {
                 $usernameDiv.css('color', nameColor);
             } else {
                 $usernameDiv.css('color', getUsernameColor(name));
@@ -126,14 +150,33 @@ $(function () {
 
     }
 
+    function onlineUserList(data) {
+        data = JSON.parse(data)
+        for (var x in data) {
+            var $useravatar = $('<img height="50px" style="margin-right: 10px;" src="' + prodPath + '/static/img/avatar/avatar%20(' + data[x].rand + ').png"/>');
+            var $strongname = $('<strong>').text(data[x].name);
+             var $username = $('<span style="display: block;margin-left: 55px;margin-top: -37px;font-size:15px;word-wrap:break-word;word-break:break-all;">').append($strongname);
+            var $userdiv = $('<div/>').append($useravatar, $username)
+            var $userDiv = $('<li style="list-style-type:none;font-size:15px;height: 50px"/>')
+                .append($userdiv);
+            $('#userListArea').append($userDiv)
+        }
+    }
+
 // 接受webSocket连接中，来自服务端的消息
     socket.onmessage = function (event) {
         // 将服务端发送来的消息进行json解析
         var data = JSON.parse(event.data);
-        if (data.type !== 3) {
+        var type = data.type;
+        if (type !== 3) {
+            if (type !== 0) {
+                $.get("/chatRoom/getOnlineList", function (data) {
+                    $('#userListArea').find("li").remove();
+                    onlineUserList(data);
+                })
+            }
             console.log("revice:", data);
             var name = data.name;
-            var type = data.type;
             var msg = data.message;
             var r = data.random
 
@@ -179,10 +222,6 @@ $(function () {
     function sendMessage(type) {
         var inputMessage = $inputArea.val();  // 获取输入框的值
 
-        var predictUrl = "http://aoi.naist.jp/predict";
-        if (prodPath === '') {
-            predictUrl = "http://127.0.0.1:8091/predict";
-        }
         var $data = JSON.stringify({"text": inputMessage, "type": type});
         var r = $('#rand').val()
         var nam = $('#name').text()
@@ -190,7 +229,7 @@ $(function () {
         if (inputMessage) {
             $.ajax({
                 type: "POST",
-                url: predictUrl,
+                url: requestUrl + "predict",
                 contentType: "application/json;charset=utf-8",
                 data: $data,
                 dataType: "json",
@@ -213,7 +252,8 @@ $(function () {
                     }
                 },
                 error: function (message) {
-                    alert("fail: " + message);
+                    // alert("fail: " + message);
+                    $("#alert").alert();
                 }
             });
         }

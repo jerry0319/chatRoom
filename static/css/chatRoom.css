@@ -58,6 +58,24 @@ html, input {
     padding-left: 10px;
 }
 
+.modal-backdrop{
+    z-index: -1050!important;
+    filter: alpha(opacity=0)!important;
+    opacity: 0!important;
+}
+
+#usersModal {
+    top: 50px;
+    width: 250px;
+    height: 500px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#userListArea {
+    padding: 0;
+}
+
 @media (min-width: 980px) {
     .header {
         padding: 6px 60px;
