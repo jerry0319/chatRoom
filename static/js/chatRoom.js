@@ -72,7 +72,7 @@ $(function () {
 
     //====================webSocket连接======================
     // 创建一个webSocket连接
-    var socket = new WebSocket('ws://' + window.location.host + '/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val());
+    var socket = new WebSocket('ws://' + window.location.host + '/chatRoom/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val());
 
     var timerID = 0;
 
