@@ -141,7 +141,7 @@ $(function () {
         else {
             var $messageBodyDiv = $('<span style="color:#999999;">')
                 .text(msg + "　" + new Date().format("yyyy-MM-dd hh:mm:ss"));
-            $messageDiv = $('<li style="list-style-type:none;font-size:15px;text-align:center;"/>')
+            $messageDiv = $('<li style="list-style-type:none;font-size:15px;text-align:center;margin-bottom: 20px;"/>')
                 .append($messageBodyDiv);
         }
 
