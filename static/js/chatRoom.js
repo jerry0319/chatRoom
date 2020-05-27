@@ -34,7 +34,7 @@ $(function () {
 
     // 行为选择按钮
     var activeButton = "sendBtn2"
-    var activeType = parseInt(activeButton.substr(activeButton.length - 1, 1));
+    var activeType = 2
     $('#dropDown').on('click', function () {
         $("#" + activeButton).addClass("active");
     });
@@ -43,6 +43,8 @@ $(function () {
         $("#" + activeButton).removeClass("active");
         $(this).addClass("active")
         activeButton = $(this).attr("id");
+        activeType = parseInt(activeButton.substr(activeButton.length - 1, 1));
+        $inputArea.focus();
     });
 
     // 通过一个hash函数得到用户名的颜色
