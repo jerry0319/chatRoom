@@ -3,7 +3,6 @@ $(function () {
     var $window = $(window);
     var $messageArea = $('#messageArea');       // 消息显示的区域
     var $inputArea = $('#inputArea');           // 输入消息的区域
-    $inputArea.focus();  // 首先聚焦到输入框
     var connected = false;                      // 用来判断是否连接的标志
     var prodPath = $('#prodPath').val();
     var requestUrl = "http://aoi.naist.jp/";
@@ -33,11 +32,15 @@ $(function () {
     });
 
     // 行为选择按钮
-    var activeButton = "sendBtn2"
-    var activeType = 2
+    var activeButton = "sendBtn2";
+    var activeType = 2;
     $('#dropDown').on('click', function () {
         $("#" + activeButton).addClass("active");
     });
+
+    // $('#dropDown').trigger("click");
+    $inputArea.focus();  // 首先聚焦到输入框
+
 
     $(".dropdown-item").on('click', function () {
         $("#" + activeButton).removeClass("active");
