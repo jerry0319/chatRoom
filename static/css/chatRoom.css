@@ -24,10 +24,12 @@ html, input {
 
 .msg_other {
     background-color: #f5f5f5;
+    max-width: 300px;
 }
 
 .msg_mine {
     background-color: #E0F1FC;
+    max-width: 300px;
 }
 
 .msg::before {
