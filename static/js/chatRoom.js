@@ -11,6 +11,7 @@ $(function () {
         requestUrl = "http://127.0.0.1:8091/";
     }
 
+    // 在线用户列表
     $("#usersModal").modal({backdrop: "static", keyboard: false});
     $("#onlineList").click(function () {
         $("#usersModal").modal('toggle')
@@ -29,6 +30,19 @@ $(function () {
 
     $(window).resize(function(){
         position($("#usersModal"));
+    });
+
+    // 行为选择按钮
+    var activeButton = "sendBtn2"
+    var activeType = parseInt(activeButton.substr(activeButton.length - 1, 1));
+    $('#dropDown').on('click', function () {
+        $("#" + activeButton).addClass("active");
+    });
+
+    $(".dropdown-item").on('click', function () {
+        $("#" + activeButton).removeClass("active");
+        $(this).addClass("active")
+        activeButton = $(this).attr("id");
     });
 
     // 通过一个hash函数得到用户名的颜色
@@ -191,22 +205,26 @@ $(function () {
     $window.keydown(function (event) {
         // 13是回车的键位
         if (event.which === 13) {
-            sendMessage(1);
+            sendMessage(activeType);
             typing = false;
         }
     });
 
     // 发送按钮点击事件
-    $("#sendBtn1").click(function () {
-        sendMessage(1);
-    });
+    // $("#sendBtn1").click(function () {
+    //     sendMessage(1);
+    // });
+    //
+    // $("#sendBtn2").click(function () {
+    //     sendMessage(2);
+    // });
+    //
+    // $("#sendBtn3").click(function () {
+    //     sendMessage(3);
+    // });
 
-    $("#sendBtn2").click(function () {
-        sendMessage(2);
-    });
-
-    $("#sendBtn3").click(function () {
-        sendMessage(3);
+    $("#sendBtn").click(function () {
+        sendMessage(activeType);
     });
 
     $(document).on('click', '#re_send', function () {
