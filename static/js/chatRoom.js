@@ -197,7 +197,10 @@ $(function () {
     function onlineUserList(data) {
         data = JSON.parse(data)
         for (var x in data) {
-            var $useravatar = $('<img height="50px" style="margin-right: 10px;" src="' + prodPath + '/static/img/avatar/avatar%20(' + data[x].rand + ').png"/>');
+            var $useravatar = $('<img height="70px" style="margin-right: 10px;" src="' + prodPath + '/static/img/avatar/avatar%20(' + data[x].rand + ').png"/>');
+            if (name === 'gao' || name === 'Gao') {
+                $useravatar = $('<img height="70px" style="margin-right: 10px;" src="' + prodPath + '/static/img/icon.png"/>');
+            }
             var $strongname = $('<strong>').text(data[x].name);
              var $username = $('<span style="display: block;margin-left: 55px;margin-top: -37px;font-size:15px;word-wrap:break-word;word-break:break-all;">').append($strongname);
             var $userdiv = $('<div/>').append($useravatar, $username)
