@@ -198,7 +198,7 @@ $(function () {
         data = JSON.parse(data)
         for (var x in data) {
             var $useravatar = $('<img height="50px" style="margin-right: 10px;" src="' + prodPath + '/static/img/avatar/avatar%20(' + data[x].rand + ').png"/>');
-            if (name === 'gao' || name === 'Gao') {
+            if ($("#name").text() === 'gao' || name === 'Gao') {
                 $useravatar = $('<img height="50px" style="margin-right: 10px;" src="' + prodPath + '/static/img/icon.png"/>');
             }
             var $strongname = $('<strong>').text(data[x].name);
