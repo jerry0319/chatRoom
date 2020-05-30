@@ -49,7 +49,7 @@ $(function () {
     // 行为选择按钮
     var activeButton = "sendBtn2";
     var activeType = 2;
-    $('#dropDown').on('click', function () {
+    $("#modeSelect").on('shown.bs.dropdown', function () {
         $("#" + activeButton).addClass("active");
     });
 
@@ -71,6 +71,8 @@ $(function () {
         $("#currentMode").text(alertMsg);
     }
     currentModeAlert();
+
+
 
 
     // 通过一个hash函数得到用户名的颜色
