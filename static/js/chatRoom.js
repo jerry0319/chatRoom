@@ -25,11 +25,26 @@ $(function () {
             left: ($window.width() - dom.outerWidth()) - 30
         });
     }
+
+    function modalHeight() {
+        var modalHeight = $window.height() / 2
+        $("#usersModal").css({
+            height: modalHeight
+        });
+        $("#usersModal .modal-body").css({
+            height: modalHeight - 100
+        });
+    }
+
     position($("#usersModal"));
+    modalHeight();
 
     $(window).resize(function(){
         position($("#usersModal"));
+        modalHeight()
     });
+
+
 
     // 行为选择按钮
     var activeButton = "sendBtn2";
@@ -48,7 +63,15 @@ $(function () {
         activeButton = $(this).attr("id");
         activeType = parseInt(activeButton.substr(activeButton.length - 1, 1));
         $inputArea.focus();
+        currentModeAlert();
     });
+
+    function currentModeAlert() {
+        var alertMsg = $("#" + activeButton).text();
+        $("#currentMode").text(alertMsg);
+    }
+    currentModeAlert();
+
 
     // 通过一个hash函数得到用户名的颜色
     function getUsernameColor(username) {
