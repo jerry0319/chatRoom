@@ -92,7 +92,7 @@ html, input {
         position: fixed; /* 屏幕滚动关键 */
         margin: 90px 0;
         width: 100%;
-        padding: 0 150px;
+        padding: 0 150px 100px 150px;
         height: 80%;
         overflow-y: scroll; /* 屏幕滚动关键 */
     }
@@ -138,7 +138,7 @@ html, input {
         position: fixed; /* 屏幕滚动关键 */
         margin: 90px 0;
         width: 100%;
-        padding: 0 10px;
+        padding: 0 10px 100px 10px;
         height: 80%;
         overflow-y: scroll; /* 屏幕滚动关键 */
     }
