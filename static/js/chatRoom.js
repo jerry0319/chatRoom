@@ -5,15 +5,42 @@ $(function () {
     var $inputArea = $('#inputArea');           // 输入消息的区域
     var connected = false;                      // 用来判断是否连接的标志
     var prodPath = $('#prodPath').val();
+    var allow_send = 0;
     var requestUrl = "http://aoi.naist.jp/";
     if (prodPath === '') {
         requestUrl = "http://127.0.0.1:8091/";
     }
 
+    function init_live2d() {
+        L2Dwidget.init({
+            "model": {
+                jsonPath: "https://unpkg.com/live2d-widget-model-wanko@1.0.5/assets/wanko.model.json",
+                "scale": 1
+            },
+            "display": {
+                "position": "right",
+                "width": 150,
+                "height": 300,
+                "hOffset": 0,
+                "vOffset": -100
+            },
+            "mobile": {
+                "show": true,
+                "scale": 0.5
+            },
+            "react": {
+                "opacityDefault": 1,
+                "opacityOnHover": 1
+            }
+        });
+    }
+
+    // init_live2d();
+
     // 在线用户列表
-    $("#usersModal").modal({backdrop: "static", keyboard: false});
+    // $("#usersModal").modal({backdrop: "static", keyboard: false});
     $("#onlineList").click(function () {
-        $("#usersModal").modal('toggle')
+        $("#usersModal").modal('toggle');
     });
 
     $('#usersModal').on('shown.bs.modal', function (e) {
@@ -39,18 +66,19 @@ $(function () {
     position($("#usersModal"));
     modalHeight();
 
-    $(window).resize(function(){
-        position($("#usersModal"));
-        modalHeight()
-    });
-
-
-
     // 行为选择按钮
     var activeButton = "sendBtn2";
     var activeType = 2;
     $("#modeSelect").on('shown.bs.dropdown', function () {
         $("#" + activeButton).addClass("active");
+        $("#live2d-widget").hide();
+        $("#wankoModal").hide();
+    });
+
+    $("#modeSelect").on('hide.bs.dropdown', function () {
+        if (activeType === 4) {
+            $("#live2d-widget").show();
+        }
     });
 
     // $('#dropDown').trigger("click");
@@ -62,6 +90,17 @@ $(function () {
         $(this).addClass("active")
         activeButton = $(this).attr("id");
         activeType = parseInt(activeButton.substr(activeButton.length - 1, 1));
+        if (activeType === 4) {
+            if ($("#live2d-widget").length > 0) {
+                $("#live2d-widget").show();
+            } else {
+                init_live2d();
+            }
+        } else {
+            if ($("#live2d-widget").length > 0) {
+                $("#live2d-widget").hide();
+            }
+        }
         $inputArea.focus();
         currentModeAlert();
     });
@@ -72,8 +111,30 @@ $(function () {
     }
     currentModeAlert();
 
+    // wanko modal
+    $("#test").click(function () {
+       $("#wankoModal").modal('toggle');
+    });
+
+    $('#wankoModal').on('shown.bs.modal', function (e) {
+        $(document).off('focusin.modal');
+    });
+
+    function positionWanko(dom) {
+        dom.css({
+            left: ($window.width() - dom.outerWidth()) - 30,
+            top: ($window.height() - dom.outerWidth()) - 20
+        });
+    }
+
+    positionWanko($("#wankoModal"));
 
 
+    $(window).resize(function(){
+        position($("#usersModal"));
+        positionWanko($("#wankoModal"));
+        modalHeight();
+    });
 
     // 通过一个hash函数得到用户名的颜色
     function getUsernameColor(username) {
@@ -225,11 +286,11 @@ $(function () {
             console.log("revice:", data);
             var name = data.name;
             var msg = data.message;
-            var r = data.random
+            var r = data.random;
 
             // type为0表示有人发消息
             // var $rand = $('#rand').val()
-            extend_message(r, name, msg, type)
+            extend_message(r, name, msg, type);
         }
     }
 
@@ -258,6 +319,12 @@ $(function () {
 
     $("#sendBtn").click(function () {
         sendMessage(activeType);
+        $("#wankoModal").modal("hide");
+    });
+
+
+    $inputArea.bind('input propertychange', function() {
+        allow_send = 0;
     });
 
     $(document).on('click', '#re_send', function () {
@@ -278,35 +345,44 @@ $(function () {
         var nam = $('#name').text()
 
         if (inputMessage) {
-            $.ajax({
-                type: "POST",
-                url: requestUrl + "predict",
-                contentType: "application/json;charset=utf-8",
-                data: $data,
-                dataType: "json",
-                async: false,
-                success: function (message) {
-                    if (message.result !== -1) { //offensive
-                        if (type === 1) {
-                            // show_modal();
-                            extend_message(r, nam, inputMessage, 0);
-                            $inputArea.val('');
-                            $inputArea.focus();
-                        } else if (type === 2) {
-                            // show_modal();
-                            sendToSocket(message.result);
-                        } else if (type === 3) {
-                            sendToSocket(message.result)
+            if (allow_send === 0) {
+                $.ajax({
+                    type: "POST",
+                    url: requestUrl + "predict",
+                    contentType: "application/json;charset=utf-8",
+                    data: $data,
+                    dataType: "json",
+                    async: false,
+                    success: function (message) {
+                        if (message.result !== -1) { //offensive
+                            if (type === 1) {
+                                // show_modal();
+                                extend_message(r, nam, inputMessage, 0);
+                                $inputArea.val('');
+                                $inputArea.focus();
+                            } else if (type === 2 || type === 3) {
+                                // show_modal();
+                                sendToSocket(message.result);
+                            } else if (type === 4) {
+                                $("#recommendation").text("");
+                                $("#recommendation").append(message.recommendation);
+                                $("#wankoModal").modal("show");
+                                $inputArea.focus();
+                                allow_send = 1;
+                                $("#sendBtn").text("Still send");
+                            }
+                        } else {
+                            sendToSocket(inputMessage);
                         }
-                    } else {
-                        sendToSocket(inputMessage);
+                    },
+                    error: function (message) {
+                        // alert("fail: " + message);
+                        $("#alert").alert();
                     }
-                },
-                error: function (message) {
-                    // alert("fail: " + message);
-                    $("#alert").alert();
-                }
-            });
+                });
+            } else if (allow_send === 1) {
+                sendToSocket(inputMessage);
+            }
         }
     }
 
@@ -322,6 +398,9 @@ $(function () {
             $inputArea.val('');      // 清空输入框的值
             socket.send(inputMessage);  // 基于WebSocket连接发送消息
             console.log("send message:" + inputMessage);
+            allow_send = 0;
+            $("#sendBtn").text("Send");
+
         }
     }
 });

@@ -77,6 +77,32 @@ html, input {
     padding: 0;
 }
 
+#wankoModal {
+    height: 200px;
+    width: 400px;
+    max-height: 400px;
+    overflow-x: hidden;
+    border-color: transparent;
+}
+
+#recommendation {
+    background: #DB5A6B;
+    border-radius: 10px;
+}
+
+#wankoModal .modal-content::before {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 300px;
+    border-width: 12px 12px 0 0;
+    border-style: solid;
+    display: block;
+    width: 0;
+    font-size: 16px;
+    border-color: #DB5A6B transparent transparent #DB5A6B;
+}
+
 @media (min-width: 980px) {
     .header {
         padding: 6px 60px;

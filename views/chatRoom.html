@@ -11,6 +11,10 @@
     <script src="{{.prodPath}}/static/js/popper.min.js"></script>
     <script src="{{.prodPath}}/static/js/bootstrap.min.js"></script>
     <script src="{{.prodPath}}/static/js/chatRoom.js"></script>
+    <script src="{{.prodPath}}/static/js/L2Dwidget.min.js"></script>
+    <script>
+
+    </script>
 
     <script>
         $(function () {
@@ -91,8 +95,10 @@
                     <a class="dropdown-item" href="#" id="sendBtn1">Only sender can see the offensive message</a>
                     <a class="dropdown-item" href="#" id="sendBtn2">Replace the offensive expression with <strong>star(*)</strong></a>
                     <a class="dropdown-item" href="#" id="sendBtn3">Replace the offensive expression with <strong>other words</strong></a>
+                    <a class="dropdown-item" href="#" id="sendBtn4">Do not replace, but recommendations</a>
                 </div>
             </div>
+            <button id="test" class="btn btn-outline-primary button">test wanko</button>
         </div>
     </div>
     <!-- inputMessage Area end -->
@@ -137,6 +143,20 @@
                 {{/*                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>*/}}
                 {{/*                        <button type="button" class="btn btn-primary">提交更改</button>*/}}
                 {{/*                    </div>*/}}
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="modal fade" id="wankoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true" data-backdrop=”static”>
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-color: transparent">
+                <div class="modal-body" id="recommendation" style="overflow: auto;max-height: 400px">
+
+                </div>
+{{/*                <div class="modal-footer">*/}}
+{{/*                    <button type="button" class="btn btn-primary">Still send</button>*/}}
+{{/*                </div>*/}}
             </div><!-- /.modal-content -->
         </div><!-- /.modal -->
     </div>
