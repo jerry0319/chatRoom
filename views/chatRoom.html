@@ -12,15 +12,12 @@
     <script src="{{.prodPath}}/static/js/bootstrap.min.js"></script>
     <script src="{{.prodPath}}/static/js/chatRoom.js"></script>
     <script src="{{.prodPath}}/static/js/L2Dwidget.min.js"></script>
-    <script>
-
-    </script>
 
     <script>
         $(function () {
             var rand = {{.rand}};
             var uname = {{.name}};
-            var prodPath = {{.prodPath}}
+            var prodPath = {{.prodPath}};
             if (uname === 'gao' || uname === 'Gao') {
                 $("#avatar").attr('src', '{{.prodPath}}/static/img/icon.png');
             } else {
@@ -31,7 +28,6 @@
     </script>
 </head>
 <body>
-<script src="{{.prodPath}}/static/js/canvas-nest.min.js"></script>
 <div>
     <header class="fixed-top shadow-sm header" style="background-color: #f5f5f5;">
         <div class="col-2">
@@ -98,7 +94,7 @@
                     <a class="dropdown-item" href="#" id="sendBtn4">Do not replace, but recommendations</a>
                 </div>
             </div>
-            <button id="test" class="btn btn-outline-primary button">test wanko</button>
+{{/*            <button id="test" class="btn btn-outline-primary button">test wanko</button>*/}}
         </div>
     </div>
     <!-- inputMessage Area end -->
@@ -161,5 +157,6 @@
         </div><!-- /.modal -->
     </div>
 </div>
+<script type="text/javascript" count="80" src="{{.prodPath}}/static/js/canvas-nest.min.js"></script>
 </body>
 </html>
