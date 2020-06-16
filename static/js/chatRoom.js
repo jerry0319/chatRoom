@@ -301,6 +301,7 @@ $(function () {
         if (event.which === 13) {
             sendMessage(activeType);
             typing = false;
+            $("#wankoModal").modal("hide");
         }
     });
 
