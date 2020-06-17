@@ -320,7 +320,7 @@ $(function () {
 
     $("#sendBtn").click(function () {
         sendMessage(activeType);
-        $("#wankoModal").modal("hide");
+        // $("#wankoModal").modal("hide");
     });
 
 
@@ -377,8 +377,7 @@ $(function () {
                         }
                     },
                     error: function (message) {
-                        // alert("fail: " + message);
-                        $("#alert").alert();
+                        alert("fail: " + message);
                     }
                 });
             } else if (allow_send === 1) {
@@ -401,7 +400,7 @@ $(function () {
             console.log("send message:" + inputMessage);
             allow_send = 0;
             $("#sendBtn").text("Send");
-
+            $("#wankoModal").modal("hide");
         }
     }
 });
