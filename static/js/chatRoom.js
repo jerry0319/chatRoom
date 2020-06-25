@@ -67,8 +67,8 @@ $(function () {
     modalHeight();
 
     // 行为选择按钮
-    var activeButton = "sendBtn2";
-    var activeType = 2;
+    var activeButton = "sendBtn4";
+    var activeType = 4;
     $("#modeSelect").on('shown.bs.dropdown', function () {
         $("#" + activeButton).addClass("active");
         $("#live2d-widget").hide();
@@ -80,6 +80,10 @@ $(function () {
             $("#live2d-widget").show();
         }
     });
+
+    if (activeType === 4) {
+        init_live2d();
+    }
 
     // $('#dropDown').trigger("click");
     $inputArea.focus();  // 首先聚焦到输入框
