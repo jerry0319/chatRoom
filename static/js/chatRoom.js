@@ -470,9 +470,7 @@ function init_stream_live(channel, width, height, player) {
         channel: channel,
     };
     if (prodPath !== '') {
-        options = {
-            parent: "aoi.naist.jp"
-        }
+        options.parent = "aoi.naist.jp";
     }
     if (player === null) {
         player = new Twitch.Player("live", options);
