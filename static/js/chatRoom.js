@@ -1,5 +1,4 @@
 var player = null;
-var prodPath = $('#prodPath').val();
 
 $(function () {
     //=========================初始化====================================
@@ -8,6 +7,7 @@ $(function () {
     var $inputArea = $('#inputArea');           // 输入消息的区域
     var connected = false;                      // 用来判断是否连接的标志
     var allow_send = 0;
+    var prodPath = $('#prodPath').val();
     var requestUrl = "https://aoi.naist.jp/";
     // if (prodPath === '') {
     //     requestUrl = "http://127.0.0.1:8091/";
@@ -16,7 +16,7 @@ $(function () {
     function live_size() {
         var live_width = $window.width() * (7 / 12) - 30;
         var live_height = live_width / 4 * 3
-        init_streams(live_width, live_height,player);
+        init_streams(live_width, live_height, player, prodPath);
     }
     live_size();
 
@@ -431,7 +431,7 @@ $(function () {
     }
 });
 
-function init_streams(live_width, live_height, player) {
+function init_streams(live_width, live_height, player, prodPath) {
     $.get("/chatRoom/getStreams", function (data) {
         var result_json = eval("(" + data + ")");
         var stream_div = "";
@@ -457,18 +457,18 @@ function init_streams(live_width, live_height, player) {
 
         $('.streamTitle').click(function (){
             $('#live').slideDown();
-            player = init_stream_live($(this).attr('name'), live_width, live_height, player);
+            player = init_stream_live($(this).attr('name'), live_width, live_height, player, prodPath);
             return player;
         });
         $(".streamThumbnail").click(function () {
             $('#live').slideDown();
-            player = init_stream_live($(this).attr('alt'), live_width, live_height, player);
+            player = init_stream_live($(this).attr('alt'), live_width, live_height, player, prodPath);
             return player;
         });
     })
 }
 
-function init_stream_live(channel, width, height, player) {
+function init_stream_live(channel, width, height, player, prodPath) {
     var options = {
         width: width,
         height: height,
