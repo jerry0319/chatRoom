@@ -8,7 +8,7 @@ $(function () {
     var $inputArea = $('#inputArea');           // 输入消息的区域
     var connected = false;                      // 用来判断是否连接的标志
     var allow_send = 0;
-    var requestUrl = "http://aoi.naist.jp/";
+    var requestUrl = "https://aoi.naist.jp/";
     // if (prodPath === '') {
     //     requestUrl = "http://127.0.0.1:8091/";
     // }
