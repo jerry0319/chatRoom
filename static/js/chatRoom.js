@@ -12,10 +12,10 @@ $(function () {
     // if (prodPath === '') {
     //     requestUrl = "http://127.0.0.1:8091/";
     // }
+    var live_width = $window.width() * (7 / 12) - 30;
+    var live_height = live_width / 4 * 3;
 
     function live_size() {
-        var live_width = $window.width() * (7 / 12) - 30;
-        var live_height = live_width / 4 * 3
         init_streams(live_width, live_height, player, prodPath);
     }
     live_size();
@@ -429,6 +429,20 @@ $(function () {
             $("#wankoModal").modal("hide");
         }
     }
+
+    $('#streamButton').click(function () {
+        if ($('#streamInput').val().length > 0) {
+            play_live(live_width, live_height, prodPath, $('#streamInput').val());
+        }
+    });
+
+    $('#streamInput').keydown(function(event) {
+        if(event.keyCode === 13){
+            if ($('#streamInput').val().length > 0) {
+                play_live(live_width, live_height, prodPath, $('#streamInput').val());
+            }
+        }
+    });
 });
 
 function init_streams(live_width, live_height, player, prodPath) {
@@ -450,20 +464,16 @@ function init_streams(live_width, live_height, player, prodPath) {
                 "</p>",
                 "</div>",
                 "</div>"
-            ]
+            ];
             stream_div += temp_div.join("");
         }
         $(".streamArea").append(stream_div);
 
         $('.streamTitle').click(function (){
-            $('#live').slideDown();
-            player = init_stream_live($(this).attr('name'), live_width, live_height, player, prodPath);
-            return player;
+            play_live(live_width, live_height, prodPath, $(this).attr('name'));
         });
         $(".streamThumbnail").click(function () {
-            $('#live').slideDown();
-            player = init_stream_live($(this).attr('alt'), live_width, live_height, player, prodPath);
-            return player;
+            play_live(live_width, live_height, prodPath, $(this).attr('alt'));
         });
     })
 }
@@ -483,5 +493,12 @@ function init_stream_live(channel, width, height, player, prodPath) {
         player.setChannel(channel);
     }
     player.setVolume(0.5);
-    return player
+    return player;
+}
+
+function play_live(live_width, live_height, prodPath, channel) {
+    $('#live').slideDown();
+    scrollTo(0,0);
+    player = init_stream_live(channel, live_width, live_height, player, prodPath);
+    return player;
 }
