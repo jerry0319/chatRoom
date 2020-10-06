@@ -2,9 +2,13 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/Unknwon/goconfig"
 	"github.com/astaxie/beego"
+	"github.com/bitly/go-simplejson"
 	"github.com/gorilla/websocket"
+	"io/ioutil"
 	"net/http"
+	"os"
 	"sort"
 	"strings"
 )
@@ -18,7 +22,15 @@ type OnlineClient struct {
 	Rand int    `json:"rand"`
 }
 
+type Stream struct {
+	Username  string `json:"name"`
+	Title     string `json:"title"`
+	Viewer    int    `json:"viewer"`
+	Thumbnail string `json:"thumbnail"`
+}
+
 type OnlineClients []OnlineClient
+type Streams []Stream
 
 func (c *ServerController) Post() {
 	name := c.GetString("name")
@@ -135,6 +147,47 @@ func (c *ServerController) GetOnlineList() {
 		}
 		c.Ctx.WriteString(string(data))
 	}
+}
+
+func (c *ServerController) GetStreams() {
+	cfg, err := goconfig.LoadConfigFile("conf/account.conf")
+	if err != nil {
+		beego.Error("get config file error")
+		os.Exit(-1)
+	}
+	token, _ := cfg.GetValue("Account", "token")
+	clientId, _ := cfg.GetValue("Account", "client_id")
+
+	client := &http.Client{}
+	req, _ := http.NewRequest("GET", "https://api.twitch.tv/helix/streams?language=en&first=100", nil)
+	req.Header.Add("Client-Id", clientId)
+	req.Header.Add("Authorization", token)
+	resp, _ := client.Do(req)
+	body, _ := ioutil.ReadAll(resp.Body)
+	parsed, err := simplejson.NewJson([]byte(body))
+	if err != nil {
+		beego.Error("parse json error")
+		os.Exit(-1)
+	}
+	arr, _ := parsed.Get("data").Array()
+	var streams Streams
+	for i := range arr {
+		stream := parsed.Get("data").GetIndex(i)
+		var _stream Stream
+		_stream.Username, _ = stream.Get("user_name").String()
+		_stream.Title, _ = stream.Get("title").String()
+		_stream.Viewer, _ = stream.Get("viewer_count").Int()
+		thumbnail, _ := stream.Get("thumbnail_url").String()
+		thumbnail = strings.Replace(thumbnail, "{width}", "250", -1)
+		_stream.Thumbnail = strings.Replace(thumbnail, "{height}", "142", -1)
+		streams = append(streams, _stream)
+	}
+	data, err := json.Marshal(streams)
+	if err != nil {
+		beego.Error("Fail to marshal stream list:", err)
+		return
+	}
+	c.Ctx.WriteString(string(data))
 }
 
 func (o OnlineClients) Len() int {

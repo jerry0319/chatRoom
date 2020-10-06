@@ -1,3 +1,5 @@
+var player = null;
+
 $(function () {
     //=========================初始化====================================
     var $window = $(window);
@@ -7,9 +9,16 @@ $(function () {
     var prodPath = $('#prodPath').val();
     var allow_send = 0;
     var requestUrl = "http://aoi.naist.jp/";
-    if (prodPath === '') {
-        requestUrl = "http://127.0.0.1:8091/";
+    // if (prodPath === '') {
+    //     requestUrl = "http://127.0.0.1:8091/";
+    // }
+
+    function live_size() {
+        var live_width = $window.width() * (7 / 12) - 30;
+        var live_height = live_width / 4 * 3
+        init_streams(live_width, live_height,player);
     }
+    live_size();
 
     function init_live2d() {
         L2Dwidget.init({
@@ -133,11 +142,18 @@ $(function () {
 
     positionWanko($("#wankoModal"));
 
+    function stream_size() {
+        $(".fixed-bottom").css({"left": $window.width() * (7 / 12)});
+    }
+
+    stream_size();
 
     $(window).resize(function(){
         position($("#usersModal"));
         positionWanko($("#wankoModal"));
         modalHeight();
+        // live_size();
+        stream_size();
     });
 
     // 通过一个hash函数得到用户名的颜色
@@ -248,9 +264,10 @@ $(function () {
         }
         // type为1或2表示有人加入或退出
         else {
-            var $messageBodyDiv = $('<span style="color:#999999;">')
+            var noti_width = $window.width() * (5 / 12)
+            var $messageBodyDiv = $('<p style="color:#999999;">')
                 .text(msg + "　" + new Date().format("yyyy-MM-dd hh:mm:ss"));
-            $messageDiv = $('<li style="list-style-type:none;font-size:15px;text-align:center;margin-bottom: 20px;"/>')
+            $messageDiv = $('<li class="notification" style="list-style-type:none;font-size:15px;margin-left:-40px;margin-bottom:20px;width:'+noti_width+'px;text-align:center;"/>')
                 .append($messageBodyDiv);
         }
 
@@ -408,3 +425,55 @@ $(function () {
         }
     }
 });
+
+function init_streams(live_width, live_height, player) {
+    $.get("/chatRoom/getStreams", function (data) {
+        var result_json = eval("(" + data + ")");
+        var stream_div = "";
+        for (var index in result_json) {
+            var stream_username = String(result_json[index].name).toLowerCase();
+            stream_username = stream_username.replace(" ", "");
+            var temp_div = [
+                "<div class='stream'>",
+                "<img class='streamThumbnail' src='" + result_json[index].thumbnail + "' alt='" + stream_username + "'/>",
+                "<div class='streamProp'>",
+                "<a href='#' class='streamTitle' name='" + stream_username + "'>" + result_json[index].title,
+                "</a>",
+                "<p class='streamUsername'>" + result_json[index].name,
+                "</p>",
+                "<p class='streamViewer'>" + result_json[index].viewer + " viewers",
+                "</p>",
+                "</div>",
+                "</div>"
+            ]
+            stream_div += temp_div.join("");
+        }
+        $(".streamArea").append(stream_div);
+
+        $('.streamTitle').click(function (){
+            $('#live').slideDown();
+            player = init_stream_live($(this).attr('name'), live_width, live_height, player);
+            return player;
+        });
+        $(".streamThumbnail").click(function () {
+            $('#live').slideDown();
+            player = init_stream_live($(this).attr('alt'), live_width, live_height, player);
+            return player;
+        });
+    })
+}
+
+function init_stream_live(channel, width, height, player) {
+    var options = {
+        width: width,
+        height: height,
+        channel: channel,
+    };
+    if (player === null) {
+        player = new Twitch.Player("live", options);
+    } else {
+        player.setChannel(channel);
+    }
+    player.setVolume(0.5);
+    return player
+}

@@ -12,6 +12,7 @@
     <script src="{{.prodPath}}/static/js/bootstrap.min.js"></script>
     <script src="{{.prodPath}}/static/js/chatRoom.js"></script>
     <script src="{{.prodPath}}/static/js/L2Dwidget.min.js"></script>
+    <script src= "https://player.twitch.tv/js/embed/v1.js"></script>
 
     <script>
         $(function () {
@@ -38,18 +39,75 @@
         <div class="col-8 title">
             <strong class="text-dark">Chat Room</strong>
         </div>
-{{/*        <div class="col-2">*/}}
-{{/*            <div style="float: right">*/}}
-{{/*                <a href="#" id="onlineList" class="btn btn-outline-secondary text-dark" role="button">*/}}
-{{/*                    <strong>Online Users</strong>*/}}
-{{/*                </a>*/}}
-{{/*            </div>*/}}
+        <div class="col-2">
+            <div style="float: right">
+                <a href="#" id="onlineList" class="btn btn-outline-secondary text-dark" role="button">
+                    <strong>Online Users</strong>
+                </a>
+            </div>
 
-{{/*        </div>*/}}
+        </div>
     </header>
     <!-- header end -->
 
-    <ul id="messageArea"></ul>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-7">
+                <div id="live" style="display: none"></div>
+                <div class="streamArea">
+                    <div class="stream" style="margin: 10px 5px 20px;">
+                        <input class="form-control" id="streamInput" type="text" placeholder="Enter a channel..."/>
+                        <button id="streamButton" class="btn btn-primary button" style="width: 15%">Search</button>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-5">
+                <ul id="messageArea"></ul>
+
+                <div class="fixed-bottom">
+                    <div class="alert alert-light alert-dismissible" role="alert" style="margin-bottom: 0">
+                        <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+                        <strong>Current Mode: </strong><strong id="currentMode"></strong>
+                    </div>
+                    <div class="input-footer">
+                        <div class="avatar">
+                            <img id="avatar" height="50px"/>
+                        </div>
+                        <div class="username" hidden>
+                            <span id="name">{{.name}}</span>
+                            <input type="hidden" id="rand" value="{{.rand}}">
+                            <input type="hidden" id="prodPath" value="{{.prodPath}}">
+                        </div>
+                        <div class="input">
+                            <input class="form-control" id="inputArea" type="text" placeholder="Type your message..."/>
+                        </div>
+                        {{/*        <button id="sendBtn1" class="btn btn-outline-primary button">Only sender can see</button>*/}}
+                        {{/*        <button id="sendBtn2" class="btn btn-outline-success button">Replace with star</button>*/}}
+                        {{/*        <button id="sendBtn3" class="btn btn-outline-info button">Replace with other</button>*/}}
+                        <!-- Default dropup button -->
+                        <div class="btn-group dropup button" id="modeSelect">
+                            <button type="button" class="btn btn-primary" id="sendBtn">
+                                Send
+                            </button>
+                            <button type="button" id="dropDown" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="0,20">
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <!-- Dropdown menu links -->
+                                <h6 class="dropdown-header">Select a mode</h6>
+                                <a class="dropdown-item" href="#" id="sendBtn1">Only sender can see the offensive message</a>
+                                <a class="dropdown-item" href="#" id="sendBtn2">Replace the offensive expression with <strong>asterisk(*)</strong></a>
+                                <a class="dropdown-item" href="#" id="sendBtn3">Replace the offensive expression with <strong>other words</strong></a>
+                                <a class="dropdown-item" href="#" id="sendBtn4">Do not replace, but advice</a>
+                            </div>
+                        </div>
+                        {{/*            <button id="test" class="btn btn-outline-primary button">test wanko</button>*/}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- message area end -->
 
     {{/*        <div id="alert" class="alert alert-danger">*/}}
@@ -57,46 +115,7 @@
     {{/*            <strong>Alert！</strong>Connection error*/}}
     {{/*        </div>*/}}
 
-    <div class="fixed-bottom">
-        <div class="alert alert-light alert-dismissible" role="alert" style="margin-bottom: 0">
-            <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
-            <strong>Current Mode: </strong><strong id="currentMode"></strong>
-        </div>
-        <div class="input-footer">
-            <div class="avatar">
-                <img id="avatar" height="50px"/>
-            </div>
-            <div class="username">
-                <span id="name">{{.name}}</span>
-                <input type="hidden" id="rand" value="{{.rand}}">
-                <input type="hidden" id="prodPath" value="{{.prodPath}}">
-            </div>
-            <div class="input">
-                <input class="form-control" id="inputArea" type="text" placeholder="Type your message..."/>
-            </div>
-    {{/*        <button id="sendBtn1" class="btn btn-outline-primary button">Only sender can see</button>*/}}
-    {{/*        <button id="sendBtn2" class="btn btn-outline-success button">Replace with star</button>*/}}
-    {{/*        <button id="sendBtn3" class="btn btn-outline-info button">Replace with other</button>*/}}
-            <!-- Default dropup button -->
-            <div class="btn-group dropup button" id="modeSelect">
-                <button type="button" class="btn btn-primary" id="sendBtn">
-                    Send
-                </button>
-                <button type="button" id="dropDown" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="0,20">
-                    <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu">
-                    <!-- Dropdown menu links -->
-                    <h6 class="dropdown-header">Select a mode</h6>
-                    <a class="dropdown-item" href="#" id="sendBtn1">Only sender can see the offensive message</a>
-                    <a class="dropdown-item" href="#" id="sendBtn2">Replace the offensive expression with <strong>asterisk(*)</strong></a>
-                    <a class="dropdown-item" href="#" id="sendBtn3">Replace the offensive expression with <strong>other words</strong></a>
-                    <a class="dropdown-item" href="#" id="sendBtn4">Do not replace, but advice</a>
-                </div>
-            </div>
-{{/*            <button id="test" class="btn btn-outline-primary button">test wanko</button>*/}}
-        </div>
-    </div>
+
     <!-- inputMessage Area end -->
 
     <!-- Modal -->
@@ -157,6 +176,6 @@
         </div><!-- /.modal -->
     </div>
 </div>
-{{/*<script type="text/javascript" count="80" src="{{.prodPath}}/static/js/canvas-nest.min.js"></script>*/}}
+<script type="text/javascript" count="80" src="{{.prodPath}}/static/js/canvas-nest.min.js"></script>
 </body>
 </html>
