@@ -1,4 +1,5 @@
 var player = null;
+var prodPath = $('#prodPath').val();
 
 $(function () {
     //=========================初始化====================================
@@ -6,7 +7,6 @@ $(function () {
     var $messageArea = $('#messageArea');       // 消息显示的区域
     var $inputArea = $('#inputArea');           // 输入消息的区域
     var connected = false;                      // 用来判断是否连接的标志
-    var prodPath = $('#prodPath').val();
     var allow_send = 0;
     var requestUrl = "http://aoi.naist.jp/";
     // if (prodPath === '') {
@@ -469,6 +469,11 @@ function init_stream_live(channel, width, height, player) {
         height: height,
         channel: channel,
     };
+    if (prodPath !== '') {
+        options = {
+            parent: "aoi.naist.jp"
+        }
+    }
     if (player === null) {
         player = new Twitch.Player("live", options);
     } else {
