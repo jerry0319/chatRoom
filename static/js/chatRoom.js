@@ -197,7 +197,11 @@ $(function () {
 
     //====================webSocket连接======================
     // 创建一个webSocket连接
-    var socket = new WebSocket('ws://' + window.location.host + '/chatRoom/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val());
+    var wsUrl = 'wss://' + window.location.host + '/chatRoom/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val();l
+    if (prodPath === '') {
+        wsUrl = 'ws://' + window.location.host + '/chatRoom/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val();
+    }
+    var socket = new WebSocket(wsUrl);
 
     var timerID = 0;
 
