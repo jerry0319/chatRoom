@@ -31,7 +31,7 @@ $(function () {
                 "width": 150,
                 "height": 300,
                 "hOffset": 0,
-                "vOffset": -100
+                "vOffset": -80
             },
             "mobile": {
                 "show": true,
@@ -100,7 +100,8 @@ $(function () {
 
     $(".dropdown-item").on('click', function () {
         $("#" + activeButton).removeClass("active");
-        $(this).addClass("active")
+        $(this).addClass("active");
+        $inputArea.val("");
         activeButton = $(this).attr("id");
         activeType = parseInt(activeButton.substr(activeButton.length - 1, 1));
         if (activeType === 4) {
@@ -396,7 +397,7 @@ $(function () {
                                 $("#wankoModal").modal("show");
                                 $inputArea.focus();
                                 allow_send = 1;
-                                $("#sendBtn").text("Still send");
+                                // $("#sendBtn").text("Still Send");
                             }
                         } else {
                             sendToSocket(inputMessage);
