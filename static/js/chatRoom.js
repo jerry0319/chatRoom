@@ -223,7 +223,7 @@ $(function () {
 
     // 当webSocket连接成功的回调函数
     socket.onopen = function () {
-        console.log("webSocket open");
+        // console.log("webSocket open");
         connected = true;
         keepAlive();
     };
@@ -231,7 +231,7 @@ $(function () {
     // 断开webSocket连接的回调函数
     socket.onclose = function () {
         cancelKeepAlive();
-        console.log("webSocket close");
+        // console.log("webSocket close");
         connected = false;
     };
 
@@ -310,7 +310,7 @@ $(function () {
                     onlineUserList(data);
                 })
             }
-            console.log("revice:", data);
+            // console.log("revice:", data);
             var name = data.name;
             var msg = data.message;
             var r = data.random;
@@ -424,7 +424,7 @@ $(function () {
         if (inputMessage && connected) {
             $inputArea.val('');      // 清空输入框的值
             socket.send(inputMessage);  // 基于WebSocket连接发送消息
-            console.log("send message:" + inputMessage);
+            // console.log("send message:" + inputMessage);
             allow_send = 0;
             $("#sendBtn").text("Send");
             $("#wankoModal").modal("hide");
