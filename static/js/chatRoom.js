@@ -202,7 +202,7 @@ $(function () {
     if (prodPath === '') {
         wsUrl = 'ws://';
     }
-    wsUrl += window.location.host + ':8090/chatRoom/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val();
+    wsUrl += window.location.host + '/chatRoom/WS?name=' + $('#name').text() + '&rand=' + $('#rand').val();
     var socket = new WebSocket(wsUrl);
 
     var timerID = 0;
